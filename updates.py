@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = "Mikhail Fedosov (tbs.micle@gmail.com)"
+__version__ = "0.1"
 
 # http://code.activestate.com/recipes/577708-check-for-package-updates-on-pypi-works-best-in-pi/
 # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
@@ -27,6 +28,7 @@ class colors:
 
 
 def check_package(dist):
+	pypi = xmlrpclib.ServerProxy("http://pypi.python.org/pypi")
 	available = pypi.package_releases(dist.project_name)
 	if not available:
 		# try to capitalize pkg name
@@ -45,7 +47,6 @@ def check_package(dist):
 		pkg_info = u"{dist.project_name} {colors.BOLD}{dist.version}{colors.ENDC}".format(colors=colors, dist=dist)
 		print(u"{pkg_info:60} {msg}".format(pkg_info=pkg_info, msg=msg))
 
-if __name__ == "__main__":
-	pypi = xmlrpclib.ServerProxy("http://pypi.python.org/pypi")
+def main():
 	pypi_pool = Pool(42)
 	pypi_pool.map(check_package, pip.get_installed_distributions())
