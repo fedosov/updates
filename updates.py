@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = "Mikhail Fedosov (tbs.micle@gmail.com)"
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 # http://code.activestate.com/recipes/577708-check-for-package-updates-on-pypi-works-best-in-pi/
 # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
@@ -44,9 +44,11 @@ def check_package(dist):
 		else:
 			msg = ""
 	if msg:
-		pkg_info = u"{dist.project_name} {colors.BOLD}{dist.version}{colors.ENDC}".format(colors=colors, dist=dist)
-		print(u"{pkg_info:60} {msg}".format(pkg_info=pkg_info, msg=msg))
+		print(u"{dist.project_name:26} {colors.BOLD}{dist.version:12}{colors.ENDC} {msg}".format(colors=colors, dist=dist, msg=msg))
 
 def main():
 	pypi_pool = Pool(42)
 	pypi_pool.map(check_package, pip.get_installed_distributions())
+
+if __name__ == "__main__":
+	main()

@@ -10,7 +10,7 @@ $ pip install updates
 $ updates
 ```
 
-![](http://i.imgur.com/ySBja1M.png)
+![](http://i.imgur.com/Fp8ggoK.png)
 
 -----
 
