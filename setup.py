@@ -43,6 +43,7 @@ setup(
 	keywords="pip updates update pypi packages",
 	author="Mikhail Fedosov",
 	author_email="tbs.micle@gmail.com",
+    url="https://github.com/fedosov/updates",
 	license="MIT",
 	py_modules=["updates"],
     **setup_params
