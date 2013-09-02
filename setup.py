@@ -28,10 +28,16 @@ setup_params = \
 	}
 }
 
+## Get long_description from index.txt:
+f = open(os.path.join(here, "docs", "index.rst"))
+long_description = f.read().strip()
+f.close()
+
 setup(
 	name="updates",
     version=get_version(),
     description="Check for updated packages in the PyPI",
+    long_description=long_description,
 	classifiers=[
 		"Development Status :: 3 - Alpha",
 		"Intended Audience :: Developers",
