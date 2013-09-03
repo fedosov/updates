@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = "Mikhail Fedosov (tbs.micle@gmail.com)"
-__version__ = "0.1.3.1"
+__version__ = "0.1.3.2"
 
 # http://code.activestate.com/recipes/577708-check-for-package-updates-on-pypi-works-best-in-pi/
 # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
@@ -43,9 +43,9 @@ class symbols:
 
 	@classmethod
 	def simplify(cls):
-		symbols.FAIL = "FAIL "
-		symbols.UPDATE = "UP "
-		symbols.OK = "OK "
+		symbols.FAIL = "x "
+		symbols.UPDATE = "+ "
+		symbols.OK = ""
 
 
 # disable colors and simplify status symbols for Windows console
@@ -79,8 +79,12 @@ def check_package(dist):
 
 def main():
 	socket.setdefaulttimeout(5.0)
-	pypi_pool = Pool()
-	pypi_pool.map(check_package, pip.get_installed_distributions())
+	# do not use multiprocessing under Windows
+	if sys.platform == "win32":
+		map(check_package, pip.get_installed_distributions())
+	else:
+		pypi_pool = Pool()
+		pypi_pool.map(check_package, pip.get_installed_distributions())
 
 if __name__ == "__main__":
 	main()
