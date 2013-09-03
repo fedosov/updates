@@ -1,7 +1,7 @@
-updates
+⤤ updates
 =======
 
-Check for updated packages in the PyPI
+Check for updated packages in the [PyPI]().
 
 -----
 
@@ -12,7 +12,11 @@ $ updates
 
 ![](http://i.imgur.com/Fp8ggoK.png)
 
------
+## Thanks
+
+**Artur Siekielski**: [Check for package updates on PyPI (works best in pip+virtualenv) (Python recipe)](http://code.activestate.com/recipes/577708-check-for-package-updates-on-pypi-works-best-in-pi/)
+
+[**joeld**](http://stackoverflow.com/users/19104/joeld): [Print in terminal with colors using Python](http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python)
 
 ## Authors
 
