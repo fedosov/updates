@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = "Mikhail Fedosov (tbs.micle@gmail.com)"
-__version__ = "0.1.3.3"
+__version__ = "0.1.3.4"
 
 # http://code.activestate.com/recipes/577708-check-for-package-updates-on-pypi-works-best-in-pi/
 # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
@@ -11,6 +11,9 @@ import sys
 import socket
 import xmlrpclib
 from multiprocessing import Pool
+
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 class colors:
 	""" Colored terminal text
@@ -75,7 +78,7 @@ def check_package(dist):
 		msg = u"{colors.FAIL}{symbols.FAIL}timeout{colors.ENDC}".format(colors=colors, symbols=symbols)
 
 	if msg:
-		print(u"{dist.project_name:26} {colors.BOLD}{dist.version:12}{colors.ENDC} {msg}".format(colors=colors, dist=dist, msg=msg))
+		print((u"{dist.project_name:26} {colors.BOLD}{dist.version:16}{colors.ENDC} {msg}".format(colors=colors, dist=dist, msg=msg)).encode("utf-8", "replace"))
 
 def main():
 	socket.setdefaulttimeout(5.0)
