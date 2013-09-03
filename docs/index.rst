@@ -11,7 +11,7 @@ Installation
 
 .. code:: bash
 
- $ pip install updates
+ $ sudo pip install updates
 
 Usage
 -----

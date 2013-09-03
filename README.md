@@ -6,7 +6,7 @@ Check for updated packages in the [PyPI]().
 -----
 
 ```
-$ pip install updates
+$ sudo pip install updates
 $ updates
 ```
 
