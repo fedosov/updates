@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = "Mikhail Fedosov (tbs.micle@gmail.com)"
-__version__ = "0.1.3.4"
+__version__ = "0.1.3.5"
 
 # http://code.activestate.com/recipes/577708-check-for-package-updates-on-pypi-works-best-in-pi/
 # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
@@ -76,6 +76,8 @@ def check_package(dist):
 				msg = ""
 	except socket.timeout:
 		msg = u"{colors.FAIL}{symbols.FAIL}timeout{colors.ENDC}".format(colors=colors, symbols=symbols)
+	except KeyboardInterrupt:
+		return False
 
 	if msg:
 		print((u"{dist.project_name:26} {colors.BOLD}{dist.version:16}{colors.ENDC} {msg}".format(colors=colors, dist=dist, msg=msg)).encode("utf-8", "replace"))
@@ -87,7 +89,13 @@ def main():
 		map(check_package, pip.get_installed_distributions())
 	else:
 		pypi_pool = Pool()
-		pypi_pool.map(check_package, pip.get_installed_distributions())
+		try:
+			pypi_pool.map(check_package, pip.get_installed_distributions())
+			pypi_pool.close()
+			pypi_pool.join()
+		except KeyboardInterrupt:
+			print("Aborted")
+			pypi_pool.terminate()
 
 if __name__ == "__main__":
 	main()
