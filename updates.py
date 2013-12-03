@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = "Mikhail Fedosov (tbs.micle@gmail.com)"
-__version__ = "0.1.3.8"
+__version__ = "0.1.4"
 
 # http://code.activestate.com/recipes/577708-check-for-package-updates-on-pypi-works-best-in-pi/
 # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
@@ -64,6 +64,9 @@ def check_package(dist):
 		if not available:
 			# try to capitalize pkg name
 			available = pypi.package_releases(dist.project_name.capitalize())
+			if not available:
+				# try to replace "-" by "_" (as in "django_compressor")
+				available = pypi.package_releases(dist.project_name.replace("-", "_"))
 
 		if not available:
 			msg = u"{colors.FAIL}{symbols.FAIL}not found at PyPI{colors.ENDC}".format(colors=colors, symbols=symbols)
