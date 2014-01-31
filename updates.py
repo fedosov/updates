@@ -10,19 +10,19 @@ import pip
 import sys
 import socket
 from multiprocessing import Pool
-if sys.version < '3':
-    from xmlrpclib import ServerProxy
+if sys.version_info < (3, 0):
+	from xmlrpclib import ServerProxy
 else:
-    from xmlrpc.client import ServerProxy
+	from xmlrpc.client import ServerProxy
 
-if sys.version < '3':
+if sys.version_info < (3, 0):
 	reload(sys)
 	sys.setdefaultencoding("utf-8")
 else:
 	# http://stackoverflow.com/questions/3828723/why-we-need-sys-setdefaultencodingutf-8-in-a-py-script
 	pass
 
-	
+
 class colors:
 	""" Colored terminal text
 	"""
@@ -65,7 +65,8 @@ if sys.platform == "win32":
 	symbols.simplify()
 
 def check_package(dist):
-	pypi = xmlrpclib.ServerProxy("http://pypi.python.org/pypi")
+	pypi = ServerProxy("http://pypi.python.org/pypi")
+
 	try:
 		available = pypi.package_releases(dist.project_name)
 		if not available:
