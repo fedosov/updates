@@ -18,6 +18,8 @@ $ updates
 
 [**joeld**](http://stackoverflow.com/users/19104/joeld): [Print in terminal with colors using Python](http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python)
 
+[**duartexyz**](https://github.com/duartexyz): [Make updates.py compatible with Python 3](https://github.com/fedosov/updates/pull/4)
+
 ## Authors
 
 **Mikhail Fedosov**
