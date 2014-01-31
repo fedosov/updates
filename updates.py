@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = "Mikhail Fedosov (tbs.micle@gmail.com)"
 __version__ = "0.1.4"
@@ -9,12 +9,20 @@ __version__ = "0.1.4"
 import pip
 import sys
 import socket
-import xmlrpclib
 from multiprocessing import Pool
+if sys.version < '3':
+    from xmlrpclib import ServerProxy
+else:
+    from xmlrpc.client import ServerProxy
 
-reload(sys)
-sys.setdefaultencoding("utf-8")
+if sys.version < '3':
+	reload(sys)
+	sys.setdefaultencoding("utf-8")
+else:
+	# http://stackoverflow.com/questions/3828723/why-we-need-sys-setdefaultencodingutf-8-in-a-py-script
+	pass
 
+	
 class colors:
 	""" Colored terminal text
 	"""
@@ -58,7 +66,6 @@ if sys.platform == "win32":
 
 def check_package(dist):
 	pypi = xmlrpclib.ServerProxy("http://pypi.python.org/pypi")
-
 	try:
 		available = pypi.package_releases(dist.project_name)
 		if not available:
