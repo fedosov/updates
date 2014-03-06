@@ -48,6 +48,6 @@ setup(
     author_email="tbs.micle@gmail.com",
     url="https://github.com/fedosov/updates",
     license="MIT",
-    py_modules=["updates"],
+    py_modules=["appearance", "packages", "updates"],
     **setup_params
 )
