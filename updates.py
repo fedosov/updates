@@ -10,6 +10,8 @@ import pip
 import sys
 import socket
 from multiprocessing import Pool
+from appearance import Colors, Symbols
+
 if sys.version_info < (3, 0):
 	from xmlrpclib import ServerProxy
 else:
@@ -22,47 +24,10 @@ else:
 	# http://stackoverflow.com/questions/3828723/why-we-need-sys-setdefaultencodingutf-8-in-a-py-script
 	pass
 
-
-class colors:
-	""" Colored terminal text
-	"""
-	OKGREEN = "\033[92m"
-	FAIL = "\033[91m"
-	BOLD = "\033[1m"
-	ENDC = "\033[0m"
-
-	@classmethod
-	def disable(cls):
-		colors.OKGREEN = ""
-		colors.FAIL = ""
-		colors.BOLD = ""
-		colors.ENDC = ""
-
-
-class symbols:
-	""" Status symbols
-	"""
-	FAIL = u"✖ "
-	UPDATE = u"+ "
-	OK = u"✓ "
-
-	@classmethod
-	def disable(cls):
-		symbols.FAIL = ""
-		symbols.UPDATE = ""
-		symbols.OK = ""
-
-	@classmethod
-	def simplify(cls):
-		symbols.FAIL = "x "
-		symbols.UPDATE = "+ "
-		symbols.OK = ""
-
-
 # disable colors and simplify status symbols for Windows console
 if sys.platform == "win32":
-	colors.disable()
-	symbols.simplify()
+	Colors.disable()
+	Symbols.simplify()
 
 def check_package(dist):
 	pypi = ServerProxy("http://pypi.python.org/pypi")
@@ -77,21 +42,21 @@ def check_package(dist):
 				available = pypi.package_releases(dist.project_name.replace("-", "_"))
 
 		if not available:
-			msg = u"{colors.FAIL}{symbols.FAIL}not found at PyPI{colors.ENDC}".format(colors=colors, symbols=symbols)
+			msg = u"{colors.fail}{symbols.fail}not found at PyPI{colors.end}".format(colors=Colors, symbols=Symbols)
 		elif available[0] != dist.version:
-			msg = u"{colors.OKGREEN}{symbols.UPDATE}{colors.BOLD}{version}{colors.ENDC}".format(colors=colors, symbols=symbols, version=available[0])
+			msg = u"{colors.ok}{symbols.update}{colors.bold}{version}{colors.end}".format(colors=Colors, symbols=Symbols, version=available[0])
 		else:
 			if "-v" in sys.argv:
-				msg = u"{symbols.OK}up to date".format(colors=colors, symbols=symbols)
+				msg = u"{symbols.ok}up to date".format(colors=Colors, symbols=Symbols)
 			else:
 				msg = ""
 	except socket.timeout:
-		msg = u"{colors.FAIL}{symbols.FAIL}timeout{colors.ENDC}".format(colors=colors, symbols=symbols)
+		msg = u"{colors.fail}{symbols.fail}timeout{colors.end}".format(colors=Colors, symbols=Symbols)
 	except KeyboardInterrupt:
 		return False
 
 	if msg:
-		print((u"{dist.project_name:26} {colors.BOLD}{dist.version:16}{colors.ENDC} {msg}".format(colors=colors, dist=dist, msg=msg)).encode("utf-8", "replace"))
+		print((u"{dist.project_name:26} {colors.bold}{dist.version:16}{colors.end} {msg}".format(colors=Colors, dist=dist, msg=msg)).encode("utf-8", "replace"))
 
 def main():
 	socket.setdefaulttimeout(5.0)
