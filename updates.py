@@ -23,11 +23,16 @@ if sys.platform == "win32":
     Symbols.simplify()
 
 
+# packages updated
+updated = Packages.create_counter()
+
+
 def output_package_info(dist, available, status):
     msg = None
     if status == Packages.FAIL:
         msg = u"{colors.fail}{symbols.fail}not found at PyPI{colors.end}".format(colors=Colors, symbols=Symbols)
     elif status == Packages.UPDATED:
+        updated.append((dist, available))
         msg = u"{colors.ok}{symbols.update}{colors.bold}{version}{colors.end}".format(colors=Colors, symbols=Symbols, version=available[0])
     else:
         if "-v" in sys.argv:
@@ -39,6 +44,8 @@ def output_package_info(dist, available, status):
 def main():
     packages = Packages(output_package_info)
     packages.check_for_updates()
+    if not updated:
+        print "Everything up-to-date."
 
 if __name__ == "__main__":
     main()

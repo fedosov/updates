@@ -2,11 +2,11 @@
 import pip
 import sys
 import socket
+import multiprocessing
 if sys.version_info < (3, 0):
     from xmlrpclib import ServerProxy
 else:
     from xmlrpc.client import ServerProxy
-from multiprocessing import Pool
 from itertools import izip_longest
 
 
@@ -41,17 +41,28 @@ class Packages(object):
         self.updated = 0
         self.status_callback = callback
 
+    @classmethod
+    def use_multiprocessing(cls):
+        return sys.platform != "win32"
+
+    @classmethod
+    def create_counter(cls):
+        if cls.use_multiprocessing():
+            return multiprocessing.Manager().list()
+        else:
+            return list()
+
     def check_for_updates(self):
         self.updated = 0
         socket.setdefaulttimeout(5.0)
         dists = pip.get_installed_distributions()
         map_params = (check_package, izip_longest(dists, [], fillvalue=self.status_callback))
-        if sys.platform == "win32":
-            map(*map_params)
-        else:
-            pypi_pool = Pool()
+        if self.use_multiprocessing():
+            pypi_pool = multiprocessing.Pool()
             pypi_pool_map = pypi_pool.map_async(*map_params)
             try:
                 pypi_pool_map.get(0xFFFF)
             except KeyboardInterrupt:
                 print("Aborted")
+        else:
+            map(*map_params)
