@@ -12,29 +12,22 @@ from itertools import izip_longest
 
 def check_package(args):
     dist, status_callback = args
-    callback = lambda status: status_callback(dist, available, status)
     pypi = ServerProxy("http://pypi.python.org/pypi")
-
+    available = None
+    callback = lambda status: status_callback(dist, available, status)
     try:
-        available = pypi.package_releases(dist.project_name)
-
-        if not available:
-            # try to capitalize pkg name
-            available = pypi.package_releases(dist.project_name.capitalize())
-            if not available:
-                # try to replace "-" by "_" (as in "django_compressor")
-                available = pypi.package_releases(dist.project_name.replace("-", "_"))
-
+        possible_package_names = [dist.project_name,
+                                  dist.project_name.capitalize(),
+                                  dist.project_name.replace("-", "_")]
+        available = reduce(lambda a, b: a if a is not None else b, map(pypi.package_releases, possible_package_names))
         if not available:
             callback(Packages.FAIL)
         elif available[0] != dist.version:
             callback(Packages.UPDATED)
         else:
             callback(Packages.OK)
-
     except socket.timeout:
         callback(Packages.FAIL)
-
     except KeyboardInterrupt:
         return False
 
@@ -52,11 +45,12 @@ class Packages(object):
         self.updated = 0
         socket.setdefaulttimeout(5.0)
         dists = pip.get_installed_distributions()
+        map_params = (check_package, izip_longest(dists, [], fillvalue=self.status_callback))
         if sys.platform == "win32":
-            map(check_package, dists)
+            map(*map_params)
         else:
             pypi_pool = Pool()
-            pypi_pool_map = pypi_pool.map_async(check_package, izip_longest(dists, [], fillvalue=self.status_callback))
+            pypi_pool_map = pypi_pool.map_async(*map_params)
             try:
                 pypi_pool_map.get(0xFFFF)
             except KeyboardInterrupt:
