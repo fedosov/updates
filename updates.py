@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = "Mikhail Fedosov (tbs.micle@gmail.com)"
-__version__ = "0.1.6.1"
+__version__ = "0.1.7.0"
 
 # http://code.activestate.com/recipes/577708-check-for-package-updates-on-pypi-works-best-in-pi/
 # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
@@ -38,14 +38,17 @@ def output_package_info(dist, available, status):
         if "-v" in sys.argv:
             msg = u"{symbols.ok}up to date".format(colors=Colors, symbols=Symbols)
     if msg:
-        print((u"{dist.project_name:30} {colors.bold}{dist.version:16}{colors.end} {msg}".format(colors=Colors, dist=dist, msg=msg)).encode("utf-8", "replace"))
+        result = u"{dist.project_name:30} {colors.bold}{dist.version:16}{colors.end} {msg}".format(colors=Colors, dist=dist, msg=msg)
+        if sys.version_info < (3, 0):
+            result = result.encode("utf-8", "replace")
+        print(result)
 
 
 def main():
     packages = Packages(output_package_info)
     packages.check_for_updates()
     if not updated:
-        print "Everything up-to-date."
+        print("Everything up-to-date.")
 
 if __name__ == "__main__":
     main()

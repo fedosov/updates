@@ -5,9 +5,11 @@ import socket
 import multiprocessing
 if sys.version_info < (3, 0):
     from xmlrpclib import ServerProxy
+    from itertools import izip_longest as zip_longest
 else:
     from xmlrpc.client import ServerProxy
-from itertools import izip_longest
+    from itertools import zip_longest
+    from functools import reduce
 
 
 def check_package(args):
@@ -56,7 +58,7 @@ class Packages(object):
         self.updated = 0
         socket.setdefaulttimeout(5.0)
         dists = pip.get_installed_distributions()
-        map_params = (check_package, izip_longest(dists, [], fillvalue=self.status_callback))
+        map_params = (check_package, zip_longest(dists, [], fillvalue=self.status_callback))
         if self.use_multiprocessing():
             pypi_pool = multiprocessing.Pool()
             pypi_pool_map = pypi_pool.map_async(*map_params)
