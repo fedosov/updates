@@ -14,7 +14,7 @@ else:
 
 def check_package(args):
     dist, status_callback = args
-    pypi = ServerProxy("http://pypi.python.org/pypi")
+    pypi = ServerProxy("https://pypi.python.org/pypi")
     available = None
     callback = lambda status: status_callback(dist, available, status)
     try:
