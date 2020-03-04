@@ -1,4 +1,4 @@
-UNMAINTENED
+UNMAINTAINED
 =======
 
 Please just use `pip list -o` instead ;)
