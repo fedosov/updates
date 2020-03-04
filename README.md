@@ -1,3 +1,8 @@
+UNMAINTENED
+=======
+
+Please just use `pip list -o` instead ;)
+
 ⤤ updates
 =======
 
